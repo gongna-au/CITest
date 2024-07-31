@@ -1,28 +1,38 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Go
+name: CI Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
 
 jobs:
+  e2e_test:
+    container:
+      image: centos:centos7  # 使用 CentOS 7 镜像
 
-  build:
-    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.20'
+      - name: Install dependencies
+        run: |
+          # 复制并运行依赖安装脚本
+          cp install_dependencies_mysql5.sh /dist/install_dependencies_mysql5.sh
+          bash /dist/install_dependencies_mysql5.sh
 
-    - name: Build
-      run: go build -v ./...
+      - name: Build the project
+        run: |
+          # 确保 Go 的路径已设置
+          export PATH=/usr/local/go/bin:/root/go/bin:$PATH
+          # 拷贝编译好的文件到特定目录
 
-    - name: Test
-      run: go test -v ./...
+      - name: Start MySQL
+        run: |
+          # 运行 MySQL 初始化脚本
+          ./e2e-mysql5.sh
+          
+
+      - name: Run E2E tests
+        run: |
+          ./ginkgo-run-mysql5.sh
