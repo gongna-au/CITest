@@ -29,6 +29,14 @@ jobs:
   releases-matrix:
     name: Release Go Binary
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 允许写入内容（如发布资产）
+      actions: read    # 允许读取 GitHub Actions 的详细信息
+      deployments: write  # 允许写入部署信息
+      issues: write     # 允许写入问题
+      pull-requests: write  # 允许写入拉取请求
+      security-events: write  # 允许写入安全事件
+
     strategy:
       matrix:
         goos: [linux, darwin]  # 支持的操作系统
@@ -46,4 +54,4 @@ jobs:
           goarch: ${{ matrix.goarch }}
           goversion: "https://go.dev/dl/go1.16.linux-amd64.tar.gz"
           project_path: "./"  # 项目路径
-          binary_name: "gaea"          # 二进制文件名称
+          binary_name: "gaea"  # 二进制文件名称
