@@ -16,6 +16,5 @@ func main() {
 	var err error
 	_, err = fmt.Println("This will not be checked") // 忽略错误
 	fmt.Println(err)
-	_, err = fmt.Println("This will not be checked") // 忽略错误
 
 }
