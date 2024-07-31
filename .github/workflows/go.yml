@@ -1,13 +1,6 @@
-name: CI Pipeline
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-
 jobs:
   e2e_test:
+    runs-on: ubuntu-latest  # 指定运行环境
     container:
       image: centos:centos7  # 使用 CentOS 7 镜像
 
@@ -32,7 +25,6 @@ jobs:
           # 运行 MySQL 初始化脚本
           ./e2e-mysql5.sh
           
-
       - name: Run E2E tests
         run: |
           ./ginkgo-run-mysql5.sh
