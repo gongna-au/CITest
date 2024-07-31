@@ -1,2 +1,0 @@
-#!/bin/bash
-ginkgo version
