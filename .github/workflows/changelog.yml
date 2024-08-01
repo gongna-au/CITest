@@ -67,4 +67,15 @@ jobs:
             -d "{\"body\": $CHANGELOG_CONTENT}")
 
           echo "Response: $response"
-          echo "$response" | jq '.body'  # 输出更新后的发布描述
+          echo "$response" | jq '.body'  # 输出更新后的发布描述 
+
+      - name: Commit and push CHANGELOG.md to main
+        run: |
+          git config --local user.name "GitHub Action"
+          git config --local user.email "action@github.com"
+          git checkout main  # 切换到主分支
+          git pull origin main  # 拉取最新的主分支
+          cp CHANGELOG.md CHANGELOG.md  # 确保 CHANGELOG.md 被更新
+          git add CHANGELOG.md
+          git commit -m "Update CHANGELOG.md for release ${{ github.event.release.tag_name }}"
+          git push origin main  # 推送到主分支
