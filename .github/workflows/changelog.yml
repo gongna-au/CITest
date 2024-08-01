@@ -7,12 +7,12 @@ jobs:
   changelog:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # 允许写入内容（如发布资产）
-      actions: read    # 允许读取 GitHub Actions 的详细信息
-      deployments: write  # 允许写入部署信息
-      issues: write     # 允许写入问题
-      pull-requests: write  # 允许写入拉取请求
-      security-events: write  # 允许写入安全事件
+      contents: write
+      actions: read
+      deployments: write
+      issues: write
+      pull-requests: write
+      security-events: write
 
     steps:
       - name: Checkout
@@ -31,7 +31,7 @@ jobs:
 
       - name: Print CHANGELOG.md
         run: cat CHANGELOG.md  # 打印内容以检查
-        
+
       - name: Get release information
         id: release_info
         run: |
@@ -42,6 +42,7 @@ jobs:
         id: create_release
         run: |
           CHANGELOG_CONTENT=$(cat CHANGELOG.md | jq -R .)  # 使用 jq 转义内容
+          echo "Debug CHANGELOG_CONTENT: $CHANGELOG_CONTENT"  # 打印转义后的内容
           response=$(curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
@@ -56,6 +57,7 @@ jobs:
       - name: Update release description
         run: |
           CHANGELOG_CONTENT=$(cat CHANGELOG.md | jq -R .)  # 使用 jq 转义内容
+          echo "Debug CHANGELOG_CONTENT: $CHANGELOG_CONTENT"  # 打印转义后的内容
           response=$(curl -L \
             -X PATCH \
             -H "Accept: application/vnd.github+json" \
