@@ -6,6 +6,13 @@ on:
 jobs:
   changelog:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 允许写入内容（如发布资产）
+      actions: read    # 允许读取 GitHub Actions 的详细信息
+      deployments: write  # 允许写入部署信息
+      issues: write     # 允许写入问题
+      pull-requests: write  # 允许写入拉取请求
+      security-events: write  # 允许写入安全事件
     steps:
       - name: Checkout
         uses: actions/checkout@v3
