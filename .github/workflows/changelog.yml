@@ -41,7 +41,7 @@ jobs:
       - name: Create a release
         id: create_release
         run: |
-          CHANGELOG_CONTENT=$(cat CHANGELOG.md | jq -R .)  # 使用 jq 转义内容
+          CHANGELOG_CONTENT=$(jq -Rs . CHANGELOG.md)  # 使用 jq 读取整个文件并转义
           echo "Debug CHANGELOG_CONTENT: $CHANGELOG_CONTENT"  # 打印转义后的内容
           response=$(curl -L \
             -X POST \
@@ -56,7 +56,7 @@ jobs:
 
       - name: Update release description
         run: |
-          CHANGELOG_CONTENT=$(cat CHANGELOG.md | jq -R .)  # 使用 jq 转义内容
+          CHANGELOG_CONTENT=$(jq -Rs . CHANGELOG.md)  # 使用 jq 读取整个文件并转义
           echo "Debug CHANGELOG_CONTENT: $CHANGELOG_CONTENT"  # 打印转义后的内容
           response=$(curl -L \
             -X PATCH \
