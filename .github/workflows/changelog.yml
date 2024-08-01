@@ -25,7 +25,6 @@ on:
 jobs:
   changelog:
     runs-on: ubuntu-latest
-    name: auto generate changelog
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -40,6 +39,9 @@ jobs:
           args: --verbose --strip 'footer' --exclude-path '.github/**'
         env:
           OUTPUT: CHANGELOG.md
+
+      - name: List files
+        run: ls -la  # 列出当前目录的文件
 
       - name: Print the changelog
         run: cat "${{ steps.git-cliff.outputs.changelog }}"
