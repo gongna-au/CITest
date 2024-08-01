@@ -1,7 +1,9 @@
 ---
 name: Bug Report
 about: Report a bug
-labels: kind/bug
+title: "[BUG] "  # 预填议题标题
+labels: [kind/bug]  # 自动添加标签
+assignees: [your-username]  # 自动分配给特定用户（可选）
 
 ---
 
