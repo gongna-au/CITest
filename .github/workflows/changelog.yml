@@ -36,23 +36,30 @@ jobs:
           echo "RELEASE_TAG=$(echo ${{ github.event.release.tag_name }})" >> $GITHUB_ENV
 
       - name: Create a release
+        id: create_release
         run: |
           CHANGELOG_CONTENT=$(cat CHANGELOG.md)
-          curl -L \
+          response=$(curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/${{ github.repository }}/releases \
-            -d "{\"tag_name\":\"${{ github.event.release.tag_name }}\",\"target_commitish\":\"master\",\"name\":\"${{ github.event.release.tag_name }}\",\"body\":\"$CHANGELOG_CONTENT\",\"draft\":false,\"prerelease\":false,\"generate_release_notes\":false}"
+            -d "{\"tag_name\":\"${{ github.event.release.tag_name }}\",\"target_commitish\":\"master\",\"name\":\"${{ github.event.release.tag_name }}\",\"body\":\"$CHANGELOG_CONTENT\",\"draft\":false,\"prerelease\":false,\"generate_release_notes\":false}")
+
+          echo "Response: $response"
+          echo "$response" | jq '.id'  # 输出发布的 ID
 
       - name: Update release description
         run: |
           CHANGELOG_CONTENT=$(cat CHANGELOG.md)
-          curl -L \
+          response=$(curl -L \
             -X PATCH \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID \
-            -d "{\"body\": \"$CHANGELOG_CONTENT\"}"
+            -d "{\"body\": \"$CHANGELOG_CONTENT\"}")
+
+          echo "Response: $response"
+          echo "$response" | jq '.body'  # 输出更新后的发布描述
