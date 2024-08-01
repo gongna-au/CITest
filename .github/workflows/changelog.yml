@@ -38,14 +38,6 @@ jobs:
           echo "RELEASE_ID=$(echo ${{ github.event.release.id }})" >> $GITHUB_ENV
           echo "RELEASE_TAG=$(echo ${{ github.event.release.tag_name }})" >> $GITHUB_ENV
 
-      - name: Check if tag already exists
-        run: |
-          TAG_EXISTS=$(git tag -l "${{ github.event.release.tag_name }}")
-          if [ -n "$TAG_EXISTS" ]; then
-            echo "Tag already exists. Exiting."
-            exit 1
-          fi
-
       - name: Create a release
         id: create_release
         run: |
